@@ -1,0 +1,61 @@
+﻿<div class="p-2">
+    <div class="rangeslider rangebase" style="width:@(Width)px">
+        <hr style="left:@(_linePositionStart)px; width:@(_linePositionEnd)px"/>
+        <input type="range" min="0" max="100" @bind="ThumbLeft" @bind:event="oninput" />
+        <input type="range" min="0" max="100" @bind="ThumbRight" @bind:event="oninput" />
+    </div>
+    <div class="py-2"></div>
+    <div class="py-3 d-flex flex-row"  style="width:@(Width)px">
+        <div class="p-1"></div>
+        <span class="small flex-grow-1"><input class="border-0" type="text" @bind="ValueLeft" /></span>
+        <span class="small border-0 "><input class="border-0" type="text" @bind="ValueRight" style="width:28px"/></span>
+    </div>
+</div>
+
+
+@code {
+    private int _linePositionStart => Convert.ToInt32(((double)ThumbLeft / 100) * Width);
+    private int _linePositionEnd => Convert.ToInt32(((double)ThumbRight / 100) * Width - _linePositionStart);
+
+    private int _thumbLeft = 25;
+    private int ThumbLeft
+    {
+        get => _thumbLeft;
+        set
+        {
+            if (value < _thumbRight)
+                _thumbLeft = value;
+        }
+    }
+
+    private int _thumbRight = 75;
+    private int ThumbRight
+    {
+        get => _thumbRight;
+        set
+        {
+            if (value > _thumbLeft)
+                _thumbRight = value;
+        }
+    }
+
+    private double _totalRange => Math.Abs(RangeMax - RangeMin);
+
+    [Parameter] public double RangeMin { get; set; } = 0;
+    [Parameter] public double RangeMax { get; set; } = 100;
+    [Parameter] public int Width { get; set; } = 500;
+
+    [Parameter]
+    public double ValueLeft
+    {
+        get => Math.Round(_totalRange * ((double)ThumbLeft / 100) + RangeMin, 2);
+        set => ThumbLeft = Convert.ToInt32((value - RangeMin) * 100 / _totalRange);
+    }
+
+    [Parameter]
+    public double ValueRight
+    {
+        get=> Math.Round(_totalRange* ((double) ThumbRight / 100) + RangeMin, 2);
+        set => ThumbRight = Convert.ToInt32((value - RangeMin) * 100 / _totalRange);
+    }
+}
