@@ -23,7 +23,7 @@
         get => _thumbLeft;
         set
         {
-            if (value < _thumbRight)
+            if (value <= _thumbRight)
                 _thumbLeft = value;
         }
     }
@@ -34,7 +34,7 @@
         get => _thumbRight;
         set
         {
-            if (value > _thumbLeft)
+            if (value >= _thumbLeft)
                 _thumbRight = value;
         }
     }
